@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './styles.css';
-import { 
+import {
   bubbleSort,
   selectionSort,
   insertionSort,
@@ -9,60 +9,60 @@ import {
 } from './SortingAlgorithms.js';
 
 const getUniqueRandomNumber = (existingNumbers, min, max) => {
-    let number;
-    do {
-      number = Math.floor(Math.random() * (max - min + 1) + min);
-    } while (existingNumbers.includes(number));
-    return number;
-  };
-  
-  // Function to generate array with unique values
-  const generateUniqueArray = (size) => {
-    const numbers = [];
-    const min = 10; // Minimum value
-    const max = 99; // Maximum value
-  
-    // Check if range has enough unique numbers
-    if (max - min + 1 < size) {
-      throw new Error('Range is too small to generate unique values');
+  let number;
+  do {
+    number = Math.floor(Math.random() * (max - min + 1) + min);
+  } while (existingNumbers.includes(number));
+  return number;
+};
+
+// Function to generate array with unique values
+const generateUniqueArray = (size) => {
+  const numbers = [];
+  const min = 10; // Minimum value
+  const max = 99; // Maximum value
+
+  // Check if range has enough unique numbers
+  if (max - min + 1 < size) {
+    throw new Error('Range is too small to generate unique values');
+  }
+
+  for (let i = 0; i < size; i++) {
+    numbers.push(getUniqueRandomNumber(numbers, min, max));
+  }
+
+  return numbers;
+};
+
+// Updated component code
+const SortingVisualizer = () => {
+  const [array, setArray] = useState([]);
+  const [colorMap, setColorMap] = useState({});
+  const [comparing, setComparing] = useState([]);
+  const [swapping, setSwapping] = useState([]);
+  const [isSorting, setIsSorting] = useState(false);
+  const [passes, setPasses] = useState(0);
+  const [currentAlgorithm, setCurrentAlgorithm] = useState('bubble');
+
+  const generateArray = () => {
+    try {
+      const newArray = generateUniqueArray(10);
+      const newColorMap = {};
+      newArray.forEach(value => {
+        newColorMap[value] = `hsl(${Math.random() * 360}, 70%, 50%)`;
+      });
+      setArray(newArray);
+      setColorMap(newColorMap);
+      setComparing([]);
+      setSwapping([]);
+      setPasses(0);
+    } catch (error) {
+      console.error('Error generating array:', error);
     }
-  
-    for (let i = 0; i < size; i++) {
-      numbers.push(getUniqueRandomNumber(numbers, min, max));
-    }
-  
-    return numbers;
   };
-  
-  // Updated component code
-  const SortingVisualizer = () => {
-    const [array, setArray] = useState([]);
-    const [colorMap, setColorMap] = useState({});
-    const [comparing, setComparing] = useState([]);
-    const [swapping, setSwapping] = useState([]);
-    const [isSorting, setIsSorting] = useState(false);
-    const [passes, setPasses] = useState(0);
-    const [currentAlgorithm, setCurrentAlgorithm] = useState('bubble');
-  
-    const generateArray = () => {
-      try {
-        const newArray = generateUniqueArray(10);
-        const newColorMap = {};
-        newArray.forEach(value => {
-          newColorMap[value] = `hsl(${Math.random() * 360}, 70%, 50%)`;
-        });
-        setArray(newArray);
-        setColorMap(newColorMap);
-        setComparing([]);
-        setSwapping([]);
-        setPasses(0);
-      } catch (error) {
-        console.error('Error generating array:', error);
-      }
-    };
-  
-    // Rest of the component code remains the same
-    // ...
+
+  // Rest of the component code remains the same
+  // ...
 
 
   useEffect(() => {
@@ -85,7 +85,7 @@ const getUniqueRandomNumber = (existingNumbers, min, max) => {
   const handleSort = async () => {
     if (isSorting) return;
     setIsSorting(true);
-    
+
     let animations;
     switch (currentAlgorithm) {
       case 'bubble':
@@ -132,6 +132,16 @@ const getUniqueRandomNumber = (existingNumbers, min, max) => {
           <option value="merge">Merge Sort</option>
         </select>
       </div>
+      <div className="legend">
+        <div className="legend-item">
+          <div className="legend-color comparing"></div>
+          <span>Comparing</span>
+        </div>
+        <div className="legend-item">
+          <div className="legend-color swapping"></div>
+          <span>Swapping</span>
+        </div>
+      </div>
 
       <div className="visualization-container">
         {array.map((value, index) => (
@@ -169,8 +179,8 @@ const getUniqueRandomNumber = (existingNumbers, min, max) => {
       </div>
 
       <div className="status-message">
-        {isSorting 
-          ? `${currentAlgorithm.charAt(0).toUpperCase() + currentAlgorithm.slice(1)} Sort in progress...` 
+        {isSorting
+          ? `${currentAlgorithm.charAt(0).toUpperCase() + currentAlgorithm.slice(1)} Sort in progress...`
           : "Select an algorithm and click 'Sort' to begin"}
       </div>
     </div>

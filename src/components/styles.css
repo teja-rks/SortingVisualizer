@@ -45,6 +45,33 @@
     position: relative;
     margin-bottom: 20px;
   }
+  .legend {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 10px;
+  }
+  
+  .legend-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+  }
+  
+  .legend-color {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    border-radius: 4px;
+  }
+  
+  .comparing {
+    background-color: red !important;
+  }
+  
+  .swapping {
+    background-color: yellow !important;
+  }
   
   .array-bar {
     position: absolute;
